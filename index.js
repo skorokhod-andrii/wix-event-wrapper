@@ -1,6 +1,6 @@
 function wrapper() {
 	const elements = {};
-	return (id) => {
+	const f = (id) => {
 		const obj = $w(id);
 		const elementProto = Object.getPrototypeOf(obj);
 		const nodeProto = Object.getPrototypeOf(elementProto);
@@ -21,6 +21,9 @@ function wrapper() {
 			return acc;
 		}, obj);
 	}
+	f.at = $w.at;
+	f.onReady = $w.onReady;
+	return f;
 }
 
 export default wrapper();
