@@ -37,8 +37,7 @@ function wrapper() {
 			return acc;
 		}, result);
 	}
-	f.at = $w.at;
-	f.onReady = $w.onReady;
+	Object.getOwnPropertyNames($w).filter(prop => typeof $w[prop] === 'function').reduce((acc, cur) => { acc[cur] = $w[cur]; return acc }, f);
 	return f;
 }
 
