@@ -12,7 +12,7 @@ After importing you can use `$` object instead of `$w` everywhere. It has same m
 import $ from 'public/wix-event-wrapper.js';
 
 $.onReady(()=>{
-	$('#myButton').onClick(event=>{console.log('initial)});
+	$('#myButton').onClick(event=>{console.log('initial')});
 	setTimeout(()=>{
 		$('#myButton').onClick(event=>{console.log('Changed)});// After 5 seconds cb function in #myButton will be replaced to this one
 	},5000)
@@ -59,6 +59,21 @@ $w.onReady(()=>{
 -Yes. Wix-event-wrapper doesn't make any changes to `$w` object, so feel free to use both where you want to.
 ##### Can I use group select `$('Button')` or multiId select `$('#myId1, #myId2')` with this library?
 - Yes.
+
+##### How Can I remove event listener?
+- Just pass empty function as callback 
+
+```
+import $ from 'public/wix-event-wrapper.js'
+
+$.onReady(()=>{
+	$('#myButton').onClick(event=>{
+		console.log('changed');
+	});
+	$('#myButton').onClick(()=>{});
+});
+```
+
 ##### Can I use `$` it to get/set attributes and call methods that are not event listener, like `.disabe()`, `.hide()` , `.collapse()` etc?
 - Yes. The original attributes/methods will be used under the hood.  
 
