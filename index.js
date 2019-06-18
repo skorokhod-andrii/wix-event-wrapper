@@ -43,3 +43,14 @@ function wrapper() {
 
 const $ = wrapper();
 export default $;
+
+
+export function getRepeaterCallbackArguments(repeaterId, event) {
+	const data = $(repeaterId).data;
+	const index = data.findIndex(item => item._id === event.context.additionalData.itemId);
+	return {
+		$item: $.at(event.context),
+		itemData: data[index],
+		index,
+	};
+}
