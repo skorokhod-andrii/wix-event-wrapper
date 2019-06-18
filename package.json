@@ -1,0 +1,25 @@
+{
+  "name": "wix-event-wrapper",
+  "version": "1.0.0",
+  "description": "Wix-event-wrapper is library that helps managing event listeners in Corvid(Wix Code). ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/skorokhod-andrii/wix-event-wrapper.git"
+  },
+  "keywords": [
+    "wix-event-wrapper",
+    "wix",
+    "wixCode",
+    "Corvid"
+  ],
+  "author": "andriis@wix.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/skorokhod-andrii/wix-event-wrapper/issues"
+  },
+  "homepage": "https://github.com/skorokhod-andrii/wix-event-wrapper#readme"
+}
