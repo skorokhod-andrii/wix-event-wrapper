@@ -41,15 +41,15 @@ function wrapper() {
 	return f;
 }
 
-const $ = wrapper();
-export default $;
+const $e = wrapper();
+export default $e;
 
 
 export function getRepeaterCallbackArguments(repeaterId, event) {
-	const data = $(repeaterId).data;
+	const data = $e(repeaterId).data;
 	const index = data.findIndex(item => item._id === event.context.additionalData.itemId);
 	return {
-		$item: $.at(event.context),
+		$item: $e.at(event.context),
 		itemData: data[index],
 		index,
 	};

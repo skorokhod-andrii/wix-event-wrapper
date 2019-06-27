@@ -3,21 +3,21 @@
 The library was created because there was no easy way to remove or change event listeners in wixCode, so for example every new $w(selector).onClick(cb), will add new event listener.
 # How to use: 
 Create file wix-event-wrapper.js in public. Copy code from index.js there.  
-`import $ from 'public/wix-event-wrapper.js' `
+`import $e from 'public/wix-event-wrapper.js' `
 
-After importing you can use `$` object instead of `$w` everywhere. It has same methods and attributes.
+After importing you can use `$e` object instead of `$w` everywhere. It has same methods and attributes.
 
 
 ```javascript
-import $ from 'public/wix-event-wrapper.js';
+import $e from 'public/wix-event-wrapper.js';
 
 $.onReady(()=>{
-	$('#myButton').onClick(event=>{console.log('initial')});
+	$e('#myButton').onClick(event=>{console.log('initial')});
 	setTimeout(()=>{
-		$('#myButton').onClick(event=>{console.log('Changed)});// After 5 seconds cb function in #myButton will be replaced to this one
+		$e('#myButton').onClick(event=>{console.log('Changed')});// After 5 seconds cb function in #myButton will be replaced to this one
 	},5000)
 	setTimeout(()=>{
-		$('#myButton').onClick(()=>{});// After 10 seconds cb function will be replaced to empty function. Use this way if you want to delete event listener
+		$e('#myButton').onClick(()=>{});// After 10 seconds cb function will be replaced to empty function. Use this way if you want to delete event listener
 	},10000);
 });
 ```
@@ -25,84 +25,85 @@ $.onReady(()=>{
 # getRepeaterCallbackArguments(repeaterId, event)
 
 ```javascript
-import $, { getRepeaterCallbackArguments } from 'public/wix-event-wrapper.js';
+import $e, { getRepeaterCallbackArguments } from 'public/wix-event-wrapper.js';
 
-$w.onReady(()=>{
+$e.onReady(()=>{
 	//set initial
-	$w('#myRepeater').onItemReady(($item, itemData, index)=>{
+	$e('#myRepeater').onItemReady(($item, itemData, index)=>{
 		$item('#myTextInRepeater').text = itemData.text1;
 	});
-	$('#myButtonInRepeater').onClick(event=>{
+	$e('#myButtonInRepeater').onClick(event=>{
 		const {$item, itemData, index} = getRepeaterCallbackArguments('#myRepeater',event);
 		console.log('initial');
 	});
-	$('#myRepeater').data = [{_id: '1' , text1: 'text1', text2: 'text2'}];
+	$e('#myRepeater').data = [{_id: '1' , text1: 'text1', text2: 'text2'}];
 
 
 	//before running this code #myButtonInRepeater will console.log('initial') for all container elements
 	//after it will console.log('changed') for all container elements
-	$w('#myRepeater').onItemReady(($item, itemData, index)=>{
+	$e('#myRepeater').onItemReady(($item, itemData, index)=>{
 		$item('#myTextInRepeater').text = itemData.text2;
 	});
-	$('#myButtonInRepeater').onClick(event=>{
+	$e('#myButtonInRepeater').onClick(event=>{
 		const {$item, itemData, index} = getRepeaterCallbackArguments('#myRepeater',event);
 		console.log('changed');
 	});
-	$w('#myRepeater').data = [...$('#myRepeater').data, ...[{_id: '2' , text1: 'text1', text2: 'text2'}]];
+	$e('#myRepeater').data = [...$e('#myRepeater').data, ...[{_id: '2' , text1: 'text1', text2: 'text2'}]];
 });
 
 ```
 
 
 # F.A.Q.
-##### Can I use both $w and $ in the same file?
+##### Can I use both $w and $e in the same file?
 -Yes. Wix-event-wrapper doesn't make any changes to `$w` object, so feel free to use both where you want to.
-##### Can I use group select `$('Button')` or multiId select `$('#myId1, #myId2')` with this library?
+##### Can I use group select `$e('Button')` or multiId select `$e('#myId1, #myId2')` with this library?
 - Yes.
 
 ##### How Can I remove event listener?
 - Just pass empty function as callback 
 
 ```
-import $ from 'public/wix-event-wrapper.js'
+import $e from 'public/wix-event-wrapper.js'
 
-$.onReady(()=>{
-	$('#myButton').onClick(event=>{
+$e.onReady(()=>{
+	$e('#myButton').onClick(event=>{
 		console.log('changed');
 	});
-	$('#myButton').onClick(()=>{});
+	$e('#myButton').onClick(()=>{});
 });
 ```
 
-##### Can I use `$` it to get/set attributes and call methods that are not event listener, like `.disabe()`, `.hide()` , `.collapse()` etc?
+##### Can I use `$e` it to get/set attributes and call methods that are not event listener, like `.disabe()`, `.hide()` , `.collapse()` etc?
 - Yes. The original attributes/methods will be used under the hood.  
 
-##### Can I use `$` with repeaters?
+##### Can I use `$e` with repeaters?
 - Yes. But I suggest to change your code a little bit(BTW It's not related to this library, it's just more efficient way to use repeater). And here is explanation why onItemReady is tricky
 
 ```javascript
-import $ from 'public/wix-event-wrapper.js'
-
-$.onReady(()=>{
-	$('#myRepeater').onItemReady(($item, itemData, index)=>{
+import $e from 'public/wix-event-wrapper.js'
+//wix-event-wrapper is used
+$e.onReady(()=>{
+	$e('#myRepeater').onItemReady(($item, itemData, index)=>{
 		$item('#myTextInRepeater').text = itemData.text1;
 		$item('#myButtonInRepeater').onClick(event=>{
 			console.log('initial')
 		});
 	});
-	$('#myRepeater').data = [{_id: '1' , text1: 'text1', text2: 'text2'}];
+	$e('#myRepeater').data = [{_id: '1' , text1: 'text1', text2: 'text2'}];
 
-	$('#myRepeater').onItemReady(($item, itemData, index)=>{
+	$e('#myRepeater').onItemReady(($item, itemData, index)=>{
 		$item('#myTextInRepeater').text = itemData.text2;
 		$item('#myButtonInRepeater').onClick(event=>{
 			console.log('changed');
 		});
 	});
-	$('#myRepeater').data = [...$('#myRepeater').data, ...[{_id: '2' , text1: 'text1', text2: 'text2'}]];
+	$e('#myRepeater').data = [...$e('#myRepeater').data, ...[{_id: '2' , text1: 'text1', text2: 'text2'}]];
 });
 ```
 
 ```javascript
+//original $w is used
 $w.onReady(()=>{
 	$w('#myRepeater').onItemReady(($item, itemData, index)=>{
 		$item('#myTextInRepeater').text = itemData.text1;
@@ -140,29 +141,29 @@ It's a rare case scenario, but it's still cool to have this ability.
 Anyway I suggest to use different syntax for repeaters, if you just need same eventListener function for all containers, but with different ($item,itemData,index) used in it.
 
 ```javascript
-import $, { getRepeaterCallbackArguments } from 'public/wix-event-wrapper.js'
+import $e, { getRepeaterCallbackArguments } from 'public/wix-event-wrapper.js'
 
-$w.onReady(()=>{
+$e.onReady(()=>{
 	//set initial
-	$w('#myRepeater').onItemReady(($item, itemData, index)=>{
+	$e('#myRepeater').onItemReady(($item, itemData, index)=>{
 		$item('#myTextInRepeater').text = itemData.text1;
 	});
-	$('#myButtonInRepeater').onClick(event=>{
+	$e('#myButtonInRepeater').onClick(event=>{
 		const {$item, itemData, index} = getRepeaterCallbackArguments('#myRepeater',event);
 		console.log('initial');
 	});
-	$('#myRepeater').data = [{_id: '1' , text1: 'text1', text2: 'text2'}];
+	$e('#myRepeater').data = [{_id: '1' , text1: 'text1', text2: 'text2'}];
 	
 	//before running this code #myButtonInRepeater will console.log('initial') for all container elements
 	//after it will console.log('changed') for all container elements
-	$w('#myRepeater').onItemReady(($item, itemData, index)=>{
+	$e('#myRepeater').onItemReady(($item, itemData, index)=>{
 		$item('#myTextInRepeater').text = itemData.text2;
 	});
-	$('#myButtonInRepeater').onClick(event=>{
+	$e('#myButtonInRepeater').onClick(event=>{
 		const {$item, itemData, index} = getRepeaterCallbackArguments('#myRepeater',event);
 		console.log('changed');
 	});
-	$w('#myRepeater').data = [...$('#myRepeater').data, ...[{{_id: '2' , text1: 'text1', text2: 'text2'}}]];
+	$e('#myRepeater').data = [...$e('#myRepeater').data, ...[{{_id: '2' , text1: 'text1', text2: 'text2'}}]];
 });
 
 ```
