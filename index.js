@@ -2,7 +2,9 @@ function wrapper() {
 	const elements = {};
 	const f = (selector) => {
 		const result = $w(selector);
-		if (Array.isArray(result)) { //multiple select
+		const elementProto = Object.getPrototypeOf(result);
+		const nodeProto = Object.getPrototypeOf(elementProto);
+		if (Array.isArray(result) || !nodeProto) { //multiple select or thunderbolt
 			const methods = Object.getOwnPropertyNames(result).filter(prop => typeof result[prop] === 'function' && prop.slice(0, 2) === 'on');
 			return methods.reduce((acc, cur) => {
 				acc[cur] = (func) => {
@@ -18,8 +20,7 @@ function wrapper() {
 				return acc;
 			}, result);
 		}
-		const elementProto = Object.getPrototypeOf(result);
-		const nodeProto = Object.getPrototypeOf(elementProto);
+
 		const getMethods = (child, parent) => (
 			Object
 			.getOwnPropertyNames(parent)
@@ -40,7 +41,7 @@ function wrapper() {
 	Object.getOwnPropertyNames($w).filter(prop => typeof $w[prop] === 'function').reduce((acc, cur) => { acc[cur] = $w[cur]; return acc }, f);
 	return f;
 }
-
+/** @type {$w.$w} */
 const $e = wrapper();
 export default $e;
 
