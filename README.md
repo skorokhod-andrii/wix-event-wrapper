@@ -1,8 +1,8 @@
-# Wix-event-wrapper is library that helps managing event listeners in Corvid(Wix Code). 
+# Wix-event-wrapper is library that helps managing event listeners in Corvid(Wix Code).
 
 The library was created because there was no easy way to remove or change event listeners in wixCode, so for example every new $w(selector).onClick(cb), will add new event listener.
-# How to use: 
-Create file wix-event-wrapper.js in public. Copy code from index.js there.  
+# How to use:
+Create file wix-event-wrapper.js in public. Copy code from index.js there.
 `import $e from 'public/wix-event-wrapper.js' `
 
 After importing you can use `$e` object instead of `$w` everywhere. It has same methods and attributes.
@@ -55,13 +55,14 @@ $e.onReady(()=>{
 
 
 # F.A.Q.
+
 ##### Can I use both $w and $e in the same file?
 -Yes. Wix-event-wrapper doesn't make any changes to `$w` object, so feel free to use both where you want to.
 ##### Can I use group select `$e('Button')` or multiId select `$e('#myId1, #myId2')` with this library?
 - Yes.
 
 ##### How Can I remove event listener?
-- Just pass empty function as callback 
+- Just pass empty function as callback
 
 ```
 import $e from 'public/wix-event-wrapper.js'
@@ -73,9 +74,15 @@ $e.onReady(()=>{
 	$e('#myButton').onClick(()=>{});
 });
 ```
+##### IMPORTANT
+Recently Wix changed how $w works under the hood for thunderbolt viewer and it did break this code. There were several changes.
+1. Methods like `onClick`, `onViewportEnter` etc are not not in __proto__ but in returned object.
+2. `$w` now returns same object for same element. Before it was new object
+I've change the code so it will work for old and for new viewer, but I cannot guarantee, that this code will not stop working again.
+I will update my repo if fix will change something else again.
 
 ##### Can I use `$e` it to get/set attributes and call methods that are not event listener, like `.disabe()`, `.hide()` , `.collapse()` etc?
-- Yes. The original attributes/methods will be used under the hood.  
+- Yes. The original attributes/methods will be used under the hood.
 
 ##### Can I use `$e` with repeaters?
 - Yes. But I suggest to change your code a little bit(BTW It's not related to this library, it's just more efficient way to use repeater). And here is explanation why onItemReady is tricky
@@ -127,15 +134,15 @@ https://www.helloworld123321.com/wew-repeater-example
 In first case (with wix-event-wrapper).
 The result of this code will be.
 In second #myTextInRepeater.text = 'text2', onClick will be console.log('changed')
-In 1st container of repeater #myTextInRepeater = '#text1' , onClick will be still console.log('initial'), 
+In 1st container of repeater #myTextInRepeater = '#text1' , onClick will be still console.log('initial'),
 
 
 In second case (without wix-event-wrapper).
 The result of this code will be.
 In second #myTextInRepeater.text = 'text2', onClick will be console.log('changed')
-In 1st container of repeater #myTextInRepeater = '#text2' , onClick will be both console.log('initial') AND  console.log('changed'), 
+In 1st container of repeater #myTextInRepeater = '#text2' , onClick will be both console.log('initial') AND  console.log('changed'),
 
-Wix-event-wrapper prevented adding of additional event listener to 1st container, so using wix-event-wrapper gives you ability to have different event listeners for different containers. 
+Wix-event-wrapper prevented adding of additional event listener to 1st container, so using wix-event-wrapper gives you ability to have different event listeners for different containers.
 It's a rare case scenario, but it's still cool to have this ability.
 
 Anyway I suggest to use different syntax for repeaters, if you just need same eventListener function for all containers, but with different ($item,itemData,index) used in it.
@@ -153,7 +160,7 @@ $e.onReady(()=>{
 		console.log('initial');
 	});
 	$e('#myRepeater').data = [{_id: '1' , text1: 'text1', text2: 'text2'}];
-	
+
 	//before running this code #myButtonInRepeater will console.log('initial') for all container elements
 	//after it will console.log('changed') for all container elements
 	$e('#myRepeater').onItemReady(($item, itemData, index)=>{
