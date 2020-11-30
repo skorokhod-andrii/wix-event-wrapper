@@ -58,7 +58,7 @@ export default $e;
 */
 export function getRepeaterCallbackArguments(repeaterId, event) {
 	const data = $e(repeaterId).data;
-	const index = data.findIndex(item => item._id === event.context.additionalData.itemId);
+	const index = data.findIndex(item => item._id === event.context.itemId);
 	return {
 			$item: $e.at(event.context),
 			itemData: data[index],
